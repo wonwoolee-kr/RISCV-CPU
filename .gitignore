@@ -1,0 +1,24 @@
+# Simulation outputs
+sim/wave/*.vcd
+sim/wave/*.fst
+sim/log/*.log
+
+# Build outputs
+build/
+obj_dir/
+
+# Verilator
+*.d
+*.o
+*.a
+
+# Icarus Verilog
+*.vvp
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store

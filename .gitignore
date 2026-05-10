@@ -1,19 +1,20 @@
-# Simulation outputs
-sim/wave/*.vcd
-sim/wave/*.fst
-sim/log/*.log
-
+cat > .gitignore <<'EOF'
 # Build outputs
 build/
 obj_dir/
+
+# Simulation outputs
+*.vvp
+*.vcd
+*.fst
+sim/wave/*.vcd
+sim/wave/*.fst
+sim/log/*.log
 
 # Verilator
 *.d
 *.o
 *.a
-
-# Icarus Verilog
-*.vvp
 
 # Editor files
 .vscode/
@@ -22,3 +23,4 @@ obj_dir/
 
 # OS files
 .DS_Store
+EOF

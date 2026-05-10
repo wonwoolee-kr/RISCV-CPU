@@ -1,7 +1,10 @@
-.PHONY: alu clean status
+.PHONY: alu regfile clean status
 
 alu:
 	./scripts/run_alu_tb.sh
+
+regfile:
+	./scripts/run_regfile_tb.sh
 
 clean:
 	rm -rf build

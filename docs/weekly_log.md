@@ -53,3 +53,48 @@ Target features:
 - Two read ports
 - One write port
 - Register `x0` hardwired to zero
+
+## Week 1 - Register File Module and Testbench
+
+### Completed
+
+- Implemented `regfile.sv` using synthesizable SystemVerilog.
+- Added register file parameters to `rv32i_pkg.sv`.
+- Register file features:
+  - 32 registers
+  - 32-bit data width
+  - Two combinational read ports
+  - One synchronous write port
+  - Register `x0` hardwired to zero
+- Created a self-checking testbench `tb_regfile.sv`.
+- Verified reset behavior, normal write/read, two-port read, write disable, overwrite, and x0 hardwired-zero behavior.
+- Created simulation script:
+  - `scripts/run_regfile_tb.sh`
+- Added Makefile target:
+  - `make regfile`
+
+### Test Result
+
+Register file simulation passed.
+
+Result summary:
+
+- PASS: 6
+- FAIL: 0
+- Final result: REGISTER FILE TEST PASSED
+
+### Notes
+
+The register file uses synchronous write and combinational read.
+
+Writes to register `x0` are ignored, and reads from register `x0` always return zero.
+
+### Next Step
+
+Implement and verify the immediate generator `imm_gen.sv`.
+
+Target immediate types:
+
+- I-type
+- S-type
+- B-type

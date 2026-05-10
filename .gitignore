@@ -23,4 +23,7 @@ sim/log/*.log
 
 # OS files
 .DS_Store
+.slang/local/
+tags
+
 EOF

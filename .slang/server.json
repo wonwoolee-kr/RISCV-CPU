@@ -1,0 +1,10 @@
+
+{
+  "flags": "-f tools/slang/slang.f",
+  "index": [
+    {
+      "dirs": ["rtl", "tb"],
+      "excludeDirs": ["build", "sim", "synth"]
+    }
+  ]
+}

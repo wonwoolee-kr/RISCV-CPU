@@ -3,6 +3,7 @@
 ## Phase 1 Instruction Subset
 
 |   Type   |       Instructions        |           Purpose         |
+|---|---|---|
 |  R-type  |   ADD, SUB, AND, OR, XOR  |       ALU operation       |
 |  I-type  |           ADDI            |    Immediate operation    |
 |  Load    |            LW             |        Memory read        |

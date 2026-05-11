@@ -6,6 +6,9 @@ alu:
 regfile:
 	./scripts/run_regfile_tb.sh
 
+imm_gen:
+	./scripts/run_imm_gen_tb.sh
+
 clean:
 	rm -rf build
 	rm -f sim/wave/*.vcd

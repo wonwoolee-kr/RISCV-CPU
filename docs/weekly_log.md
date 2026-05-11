@@ -98,3 +98,45 @@ Target immediate types:
 - I-type
 - S-type
 - B-type
+
+
+## Week 1 - Immediate Generator Module and Testbench
+
+### Completed
+
+- Implemented `imm_gen.sv` using synthesizable SystemVerilog.
+- Added immediate select parameters to `rv32i_pkg.sv`.
+- Supported immediate types:
+  - I-type
+  - S-type
+  - B-type
+- Created a self-checking testbench `tb_imm_gen.sv`.
+- Verified positive and negative immediate generation.
+- Created simulation script:
+  - `scripts/run_imm_gen_tb.sh`
+- Added Makefile target:
+  - `make imm_gen`
+
+### Test Result
+
+Immediate generator simulation passed.
+
+Result summary:
+
+- PASS: 6
+- FAIL: 0
+- Final result: IMMEDIATE GENERATOR TEST PASSED
+
+### Notes
+
+The immediate generator extracts immediate fields from a 32-bit RISC-V instruction and sign-extends them to `XLEN`.
+
+I-type immediate is used by instructions such as `ADDI` and `LW`.
+
+S-type immediate is used by store instructions such as `SW`.
+
+B-type immediate is used by branch instructions such as `BEQ`.
+
+### Next Step
+
+Implement and verify the decoder or control unit for the initial RV32I instruction subset.

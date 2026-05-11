@@ -419,7 +419,7 @@ This confirms that the current ALU implementation works correctly for the suppor
 
 ---
 
-## 12. Interview Questions and Study Notes
+## 12. Study Notes
 
 ### Q1. Why is the ALU implemented with `always_comb`?
 

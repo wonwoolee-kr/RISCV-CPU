@@ -648,7 +648,7 @@ Active-low reset signals are also convenient when multiple reset sources need to
 
 With open-drain or open-collector style reset circuits, multiple devices can share one reset line. If any device pulls the reset line low, the entire system enters reset.
 
-This is often described as a wired-OR structure, although the physical behavior is that multiple devices can pull the shared line down to `0`.
+This is often conceptually described as a Wired-OR structure(Although technically it is Wired-AND configuration), although the physical behavior is that multiple devices can pull the shared line down to `0`.
 
 Conceptually:
 

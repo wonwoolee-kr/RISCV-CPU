@@ -37,6 +37,7 @@ The goal is not only to implement a working CPU, but also to build a digital des
 
 - [ALU Module](docs/rtl_notes/alu.md)
 - [Register File Module](docs/rtl_notes/regfile.md)
+- [Immediate Generator Module](docs/rtl_notes/imm_gen.md)
 - [SystemVerilog Syntax Notes](docs/rtl_notes/systemverilog_syntax.md)
 
 
@@ -58,3 +59,4 @@ Implemented modules:
 |---|---|---|---|
 |        ALU        |       `rtl/core/alu.sv`       |       `tb/unit/tb_alu.sv`     |        Passed         |
 |    Register File  |     `rtl/core/regfile.sv`     |     `tb/unit/tb_regfile.sv`   |        Passed         |
+| Immediate Generator | `rtl/core/imm_gen.sv` | `tb/unit/tb_imm_gen.sv` | Passed |

@@ -12,6 +12,9 @@ imm_gen:
 decoder:
 	./scripts/run_decoder_tb.sh
 
+control_unit:
+	./scripts/run_control_unit_tb.sh
+
 clean:
 	rm -rf build
 	rm -f sim/wave/*.vcd

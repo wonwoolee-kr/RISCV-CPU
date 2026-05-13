@@ -53,7 +53,7 @@ module decoder
         instr_valid_o = 1'b0;
 
         case (opcode)
-            OPCODE_OP: begin
+            OPCODE_OP: begin        // reg-reg ALU operation, for type-R
                 is_r_type_o = 1'b1;
 
                 rs1_addr_o = rs1_raw;

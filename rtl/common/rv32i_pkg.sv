@@ -13,6 +13,8 @@ package rv32i_pkg;
     parameter int FUNCT3_WIDTH = 3;         // RISC-V funct3 width
     parameter int FUNCT7_WIDTH = 7;         // RISC-V funct7 width
 
+    parameter int WB_SEL_WIDTH = 2;         // Writeback src select signal width
+
     // ALU localparam
     localparam logic [ALU_OP_WIDTH-1:0] ALU_ADD = 4'd0;
     localparam logic [ALU_OP_WIDTH-1:0] ALU_SUB = 4'd1;
@@ -24,7 +26,7 @@ package rv32i_pkg;
     localparam logic [IMM_SEL_WIDTH-1:0] IMM_I      = 3'd0;
     localparam logic [IMM_SEL_WIDTH-1:0] IMM_S      = 3'd1;
     localparam logic [IMM_SEL_WIDTH-1:0] IMM_B      = 3'd2;      // also called IMM_SB in Patterson & Hennessy
-    localparam logic [IMM_SEL_WIDTH-1:0] IMM_NONE   = 3'd7;
+    localparam logic [IMM_SEL_WIDTH-1:0] IMM_NONE   = 3'd7;      // No immdediate is used, mainly for R-type
 
 
     // RISC-V opcode values
@@ -46,4 +48,9 @@ package rv32i_pkg;
     // funct7 values for R-type ADD/SUB
     localparam logic [FUNCT7_WIDTH-1:0] FUNCT7_ADD = 7'b0000000;
     localparam logic [FUNCT7_WIDTH-1:0] FUNCT7_SUB = 7'b0100000;
+
+    // Writeback source select values
+    localparam logic [WB_SEL_WIDTH-1:0] WB_ALU  = 2'd0; // Write back ALU result            :: R-Type + ADDI
+    localparam logic [WB_SEL_WIDTH-1:0] WB_MEM  = 2'd1; // Write back data memory read data :: LW
+    localparam logic [WB_SEL_WIDTH-1:0] WB_NONE = 2'd3; // No writeback source is used      :: SW, BEQ, invalid
 endpackage

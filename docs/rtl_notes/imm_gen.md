@@ -209,8 +209,11 @@ end
 
 The least significant bit `imm[0]` is always `0` because branch targets are aligned.
 
-This means the branch offset is effectively shifted left by 1 bit.
+Why is imm[0] always 0?
 
+In the RISC-V architecture, all instructions must be aligned to 2-byte boundaries (to support the 16-bit Compressed Instruction Set). Since the target address of a branch is always an even number, the least significant bit (LSB) of the offset is guaranteed to be 0.
+
+By omitting this redundant 0 in the instruction encoding and reassigning that bit position to a higher magnitude (bit 12), RISC-V can double the branch range without increasing the number of bits in the instruction format.
 ---
 
 ## 9. Why B-type Uses an SB-like Encoding
@@ -240,7 +243,7 @@ imm[11]   = instr[7]
 imm[0]    = 1'b0
 ```
 
-### compare Type-S and Type-B
+### Hardware Resource Sharing: S-Type vs. B-Type
 
 | instruction bit | Type-S | Type-B|
 |---|---|---|

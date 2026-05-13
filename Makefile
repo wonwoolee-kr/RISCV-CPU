@@ -9,6 +9,9 @@ regfile:
 imm_gen:
 	./scripts/run_imm_gen_tb.sh
 
+decoder:
+	./scripts/run_decoder_tb.sh
+
 clean:
 	rm -rf build
 	rm -f sim/wave/*.vcd

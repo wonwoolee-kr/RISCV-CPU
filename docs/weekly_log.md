@@ -140,3 +140,63 @@ B-type immediate is used by branch instructions such as `BEQ`.
 ### Next Step
 
 Implement and verify the decoder or control unit for the initial RV32I instruction subset.
+
+
+## Week 1 - Decoder Module and Testbench
+
+### Completed
+
+- Implemented `decoder.sv` using synthesizable SystemVerilog.
+- Added opcode, funct3, and funct7 constants to `rv32i_pkg.sv`.
+- Supported initial RV32I instruction subset:
+  - ADD
+  - SUB
+  - AND
+  - OR
+  - XOR
+  - ADDI
+  - LW
+  - SW
+  - BEQ
+- Extracted instruction fields:
+  - opcode
+  - rd
+  - funct3
+  - rs1
+  - rs2
+  - funct7
+- Generated first-level decode outputs:
+  - rs1 address
+  - rs2 address
+  - rd address
+  - ALU operation
+  - immediate type
+  - instruction category flags
+  - instruction valid flag
+- Created a self-checking testbench `tb_decoder.sv`.
+- Created simulation script:
+  - `scripts/run_decoder_tb.sh`
+- Added Makefile target:
+  - `make decoder`
+
+### Test Result
+
+Decoder simulation passed.
+
+Result summary:
+
+- PASS: 10
+- FAIL: 0
+- Final result: DECODER TEST PASSED
+
+### Notes
+
+The decoder performs instruction field extraction and first-level instruction decoding.
+
+It does not generate full datapath control signals such as `reg_write`, `mem_write`, `alu_src`, or `wb_sel`.
+
+Those signals will be generated later by the control unit.
+
+### Next Step
+
+Implement and verify the control unit for the initial RV32I instruction subset.

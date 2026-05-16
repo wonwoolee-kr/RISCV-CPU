@@ -41,7 +41,8 @@ The goal is not only to implement a working CPU, but also to build a digital des
 - [Decoder Module](docs/rtl_notes/decoder.md)
 - [Control Unit Module](docs/rtl_notes/control_unit.md)
 - [SystemVerilog Syntax Notes](docs/rtl_notes/systemverilog_syntax.md)
-
+- [PC Module](docs/rtl_notes/pc.md)
+- [Instruction Memory Module](docs/rtl_notes/instr_mem.md)
 
 
 ## Current Status

@@ -14,6 +14,8 @@ decoder:
 
 control_unit:
 	./scripts/run_control_unit_tb.sh
+fetch:
+	./scripts/run_fetch_tb.sh
 
 clean:
 	rm -rf build

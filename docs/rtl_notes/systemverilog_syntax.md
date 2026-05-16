@@ -1047,3 +1047,299 @@ tb_control_unit.sv
 It also makes the design easier to extend into a pipelined CPU later.
 
 In a pipelined CPU, the Decoder is used in the ID stage, and the generated control signals are stored in the ID/EX pipeline register.
+
+## Parameterized Module
+
+A module can have parameters that control its configuration.
+
+Example from the Instruction Memory:
+
+```systemverilog
+module instr_mem
+    import rv32i_pkg::*;
+#(
+    parameter int    IMEM_DEPTH = 256,
+    parameter string HEX_FILE   = ""
+)
+(
+    input  logic [XLEN-1:0]       addr_i,
+    output logic [INST_WIDTH-1:0] instr_o
+);
+```
+
+Parameters make the module reusable.
+
+In this example:
+
+| Parameter | Meaning |
+|---|---|
+| `IMEM_DEPTH` | Number of instruction words |
+| `HEX_FILE` | Hex file used to initialize memory |
+
+When instantiating the module, parameters can be overridden.
+
+```systemverilog
+instr_mem #(
+    .IMEM_DEPTH (256),
+    .HEX_FILE   ("sim/hex/fetch_test.hex")
+) u_instr_mem (
+    .addr_i  (pc),
+    .instr_o (instr)
+);
+```
+
+This allows the same `instr_mem` module to be used with different memory sizes or hex files.
+
+---
+
+## `$clog2`
+
+`$clog2` returns the ceiling of log2 of a value.
+
+Example:
+
+```systemverilog
+localparam int IMEM_ADDR_WIDTH = $clog2(IMEM_DEPTH);
+```
+
+If:
+
+```text
+IMEM_DEPTH = 256
+```
+
+then:
+
+```text
+$clog2(256) = 8
+```
+
+This means 8 bits are needed to index 256 memory entries.
+
+`$clog2` is useful when address width depends on a parameter.
+
+---
+
+## Unpacked Memory Array
+
+A memory can be declared as an unpacked array.
+
+Example:
+
+```systemverilog
+logic [INST_WIDTH-1:0] mem [0:IMEM_DEPTH-1];
+```
+
+This means:
+
+```text
+IMEM_DEPTH entries
+Each entry is INST_WIDTH bits wide
+```
+
+For example:
+
+```systemverilog
+logic [31:0] mem [0:255];
+```
+
+means:
+
+```text
+256 words × 32 bits
+```
+
+This is commonly used for simple instruction memory or data memory models.
+
+---
+
+## `initial` Block
+
+An `initial` block runs once at the beginning of simulation.
+
+Example:
+
+```systemverilog
+initial begin
+    for (i = 0; i < IMEM_DEPTH; i = i + 1) begin
+        mem[i] = '0;
+    end
+
+    if (HEX_FILE != "") begin
+        $readmemh(HEX_FILE, mem);
+    end
+end
+```
+
+In this project, `initial` is used to initialize simulation memory.
+
+Important note:
+
+```text
+initial blocks are commonly used in testbenches and simulation models.
+For synthesizable ASIC RTL, initialization style must be checked carefully depending on the target flow.
+```
+
+---
+
+## `$readmemh`
+
+`$readmemh` loads hexadecimal values from a text file into a memory array.
+
+Example:
+
+```systemverilog
+$readmemh("sim/hex/fetch_test.hex", mem);
+```
+
+Example hex file:
+
+```text
+00500093  // addi x1, x0, 5
+00700113  // addi x2, x0, 7
+002081b3  // add  x3, x1, x2
+00000013  // nop
+```
+
+The first hex value is loaded into `mem[0]`, the second into `mem[1]`, and so on.
+
+```text
+mem[0] = 32'h00500093
+mem[1] = 32'h00700113
+mem[2] = 32'h002081b3
+mem[3] = 32'h00000013
+```
+
+`$readmemh` is very useful for instruction memory and data memory simulation.
+
+---
+
+## Clock Generator in Testbench
+
+A simple clock can be generated using an `initial` block and `forever`.
+
+Example:
+
+```systemverilog
+initial begin
+    clk = 1'b0;
+    forever #5 clk = ~clk;
+end
+```
+
+This creates a clock with a 10 ns period.
+
+```text
+#5 low-to-high
+#5 high-to-low
+Total period = 10 ns
+```
+
+If the timescale is:
+
+```systemverilog
+`timescale 1ns/1ps
+```
+
+then `#5` means 5 ns.
+
+---
+
+## Event Control: `@(posedge clk)`
+
+A testbench can wait for a clock edge using event control.
+
+Example:
+
+```systemverilog
+@(posedge clk);
+#1;
+```
+
+Meaning:
+
+```text
+Wait until the next rising edge of clk
+Then wait 1 time unit for signals to settle
+```
+
+In this project, this is used to check PC updates after a clock edge.
+
+---
+
+## Byte Address and Word Address
+
+The PC is a byte address, but instruction memory is often indexed by word.
+
+For RV32I:
+
+```text
+1 instruction = 32 bits = 4 bytes
+```
+
+Therefore:
+
+```text
+PC = 0  → instruction index 0
+PC = 4  → instruction index 1
+PC = 8  → instruction index 2
+```
+
+In RTL, this conversion can be written as:
+
+```systemverilog
+assign word_addr = addr_i[IMEM_ADDR_WIDTH+1:2];
+```
+
+The lower two bits are removed because instructions are 4-byte aligned.
+
+This is equivalent to dividing the byte address by 4.
+
+---
+
+## Holding State with Enable
+
+A register can update only when an enable signal is asserted.
+
+Example from the PC module:
+
+```systemverilog
+always_ff @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+        pc_o <= '0;
+    end else begin
+        if (pc_en_i) begin
+            pc_o <= next_pc_i;
+        end
+    end
+end
+```
+
+Behavior:
+
+```text
+rst_ni = 0 → reset pc_o
+pc_en_i = 1 → update pc_o
+pc_en_i = 0 → hold previous pc_o value
+```
+
+This style is useful for pipeline stall control later.
+
+---
+
+## Hex File Comments
+
+Hex files used by `$readmemh` can include comments.
+
+Example:
+
+```text
+00500093  // addi x1, x0, 5
+00700113  // addi x2, x0, 7
+002081b3  // add  x3, x1, x2
+00000013  // addi x0, x0, 0  // nop
+```
+
+The hex value is loaded into memory, and the comment is ignored.
+
+This makes test programs easier to read and debug.
